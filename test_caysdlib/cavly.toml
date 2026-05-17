@@ -1,0 +1,60 @@
+[package]
+name = "test_caysdlib"
+version = "0.1.0"
+description = "A Cavvy project"
+authors = []
+license = "MIT"
+# project_type = "bin"  # bin（可执行）或 lib（库）
+main = "main.cay"
+src_dir = "src"
+target_dir = "target"
+
+[build]
+opt_level = "2"
+debug = false
+static_link = false
+# target = "x86_64-w64-mingw32"
+cflags = []
+ldflags = []
+lib_paths = []
+libs = []
+lto = false
+opt_ir = false
+keep_ir = false
+
+[ffi]
+# 系统库，如 "user32", "kernel32" (Windows) 或 "m", "pthread" (Linux)
+system_libs = []
+include_paths = []
+link_options = []
+
+# 第三方库配置示例
+# [ffi.libraries.sdl2]
+# name = "SDL2"
+# lib = "SDL2"
+# path = "./lib"
+# static_lib = false
+# deps = ["SDL2main"]
+#
+# [ffi.libraries.sdl2.platform.windows]
+# lib = "SDL2"
+# path = "C:/SDL2/lib"
+# ldflags = ["-lSDL2main", "-lSDL2"]
+#
+# [ffi.libraries.sdl2.platform.linux]
+# lib = "SDL2"
+# path = "/usr/lib/x86_64-linux-gnu"
+
+[workspace]
+# 本地库项目路径列表
+# members = ["../mylib", "./libs/helper"]
+# 额外的库搜索路径
+# lib_paths = ["./lib", "/usr/local/lib"]
+
+[dependencies]
+# 依赖其他 Cavvy 包
+# example = "1.0.0"
+caysdlib = { path = "../caysdlib" }
+
+[dev-dependencies]
+# 仅开发时使用的依赖

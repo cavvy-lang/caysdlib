@@ -1,0 +1,498 @@
+// ============================================================
+// caysdlib - Cavvy SDL2 Binding Library v0.1.0
+// Cavvy FFI bindings for SDL2 multimedia library
+// Provides wrapper classes for window, renderer, event handling
+// ============================================================
+
+// ============ SDL Init Flags ============
+#define SDL_INIT_TIMER          0x00000001
+#define SDL_INIT_AUDIO          0x00000010
+#define SDL_INIT_VIDEO          0x00000020
+#define SDL_INIT_JOYSTICK       0x00000200
+#define SDL_INIT_HAPTIC         0x00001000
+#define SDL_INIT_GAMECONTROLLER 0x00002000
+#define SDL_INIT_EVENTS         0x00004000
+#define SDL_INIT_SENSOR         0x00008000
+#define SDL_INIT_EVERYTHING     0x0000FFFF
+
+// ============ Window Flags ============
+#define SDL_WINDOW_FULLSCREEN       0x00000001
+#define SDL_WINDOW_OPENGL           0x00000002
+#define SDL_WINDOW_SHOWN            0x00000004
+#define SDL_WINDOW_HIDDEN           0x00000008
+#define SDL_WINDOW_BORDERLESS       0x00000010
+#define SDL_WINDOW_RESIZABLE        0x00000020
+#define SDL_WINDOW_MINIMIZED        0x00000040
+#define SDL_WINDOW_MAXIMIZED        0x00000080
+#define SDL_WINDOW_MOUSE_GRABBED    0x00000100
+#define SDL_WINDOW_INPUT_FOCUS      0x00000200
+#define SDL_WINDOW_MOUSE_FOCUS      0x00000400
+#define SDL_WINDOW_FULLSCREEN_DESKTOP 0x00001001
+#define SDL_WINDOW_ALLOW_HIGHDPI    0x00002000
+#define SDL_WINDOW_ALWAYS_ON_TOP    0x00008000
+#define SDL_WINDOW_SKIP_TASKBAR     0x00010000
+#define SDL_WINDOW_UTILITY          0x00020000
+#define SDL_WINDOW_TOOLTIP          0x00040000
+#define SDL_WINDOW_POPUP_MENU       0x00080000
+
+// ============ Window Position ============
+#define SDL_WINDOWPOS_CENTERED      0x2FFF0000
+#define SDL_WINDOWPOS_UNDEFINED     0x1FFF0000
+
+// ============ Event Types ============
+#define SDL_FIRSTEVENT      0
+#define SDL_QUIT            0x0100
+#define SDL_WINDOWEVENT     0x0200
+#define SDL_KEYDOWN         0x0300
+#define SDL_KEYUP           0x0301
+#define SDL_MOUSEMOTION     0x0400
+#define SDL_MOUSEBUTTONDOWN 0x0401
+#define SDL_MOUSEBUTTONUP   0x0402
+#define SDL_MOUSEWHEEL      0x0403
+
+// ============ Window Event Subtypes ============
+#define SDL_WINDOWEVENT_NONE        0
+#define SDL_WINDOWEVENT_SHOWN       1
+#define SDL_WINDOWEVENT_HIDDEN      2
+#define SDL_WINDOWEVENT_EXPOSED     3
+#define SDL_WINDOWEVENT_MOVED       4
+#define SDL_WINDOWEVENT_RESIZED     5
+#define SDL_WINDOWEVENT_CLOSE       14
+
+// ============ Scan Codes (subset) ============
+#define SDL_SCANCODE_ESCAPE     41
+#define SDL_SCANCODE_RETURN     40
+#define SDL_SCANCODE_SPACE      44
+#define SDL_SCANCODE_UP         82
+#define SDL_SCANCODE_DOWN       81
+#define SDL_SCANCODE_LEFT       80
+#define SDL_SCANCODE_RIGHT      79
+#define SDL_SCANCODE_W          26
+#define SDL_SCANCODE_A          4
+#define SDL_SCANCODE_S          22
+#define SDL_SCANCODE_D          7
+
+// ============ Key Codes (subset) ============
+#define SDLK_ESCAPE     27
+#define SDLK_RETURN     13
+#define SDLK_SPACE      32
+#define SDLK_UP         273
+#define SDLK_DOWN       274
+#define SDLK_LEFT       276
+#define SDLK_RIGHT      275
+
+// ============ Renderer Flags ============
+#define SDL_RENDERER_SOFTWARE       0x00000001
+#define SDL_RENDERER_ACCELERATED    0x00000002
+#define SDL_RENDERER_PRESENTVSYNC   0x00000004
+#define SDL_RENDERER_TARGETTEXTURE  0x00000008
+
+// ============ Texture Access ============
+#define SDL_TEXTUREACCESS_STATIC    0
+#define SDL_TEXTUREACCESS_STREAMING 1
+#define SDL_TEXTUREACCESS_TARGET    2
+
+// ============ Pixel Formats ============
+// Values calculated from SDL_DEFINE_PIXELFORMAT for little-endian x64
+#define SDL_PIXELFORMAT_ARGB8888    0x15362004
+#define SDL_PIXELFORMAT_RGBA8888    0x15462004
+#define SDL_PIXELFORMAT_ABGR8888    0x15762004
+#define SDL_PIXELFORMAT_BGRA8888    0x15862004
+#define SDL_PIXELFORMAT_RGB888      0x15142004
+#define SDL_PIXELFORMAT_BGR888      0x15342004
+
+// ============ Mouse Button ============
+#define SDL_BUTTON_LEFT     1
+#define SDL_BUTTON_MIDDLE   2
+#define SDL_BUTTON_RIGHT    3
+
+// ============ Key State ============
+#define SDL_PRESSED     1
+#define SDL_RELEASED    0
+
+// ============================================================
+// FFI extern declarations - C runtime and SDL2 functions
+// ============================================================
+
+// --- C Runtime (stdlib) ---
+extern long malloc(int size);
+extern void free(long ptr);
+
+// --- Runtime Pointer Helpers (not all are in the standard library) ---
+extern int __cay_read_int(long ptr);
+extern void __cay_write_int(long ptr, int value);
+
+// --- Core SDL ---
+extern int SDL_Init(int flags);
+extern void SDL_Quit();
+extern String SDL_GetError();
+
+// --- Timer ---
+extern int SDL_GetTicks();
+extern void SDL_Delay(int ms);
+
+// --- Window ---
+extern long SDL_CreateWindow(String title, int x, int y, int w, int h, int flags);
+extern void SDL_DestroyWindow(long window);
+extern long SDL_GetWindowSurface(long window);
+extern int SDL_UpdateWindowSurface(long window);
+extern int SDL_SetWindowTitle(long window, String title);
+extern long SDL_GetWindowID(long window);
+
+// --- Renderer ---
+extern long SDL_CreateRenderer(long window, int index, int flags);
+extern void SDL_DestroyRenderer(long renderer);
+extern int SDL_RenderClear(long renderer);
+extern void SDL_RenderPresent(long renderer);
+extern int SDL_SetRenderDrawColor(long renderer, int r, int g, int b, int a);
+extern long SDL_CreateTexture(long renderer, int format, int access, int w, int h);
+extern void SDL_DestroyTexture(long texture);
+extern int SDL_RenderCopy(long renderer, long texture, long srcrect, long dstrect);
+extern int SDL_RenderFillRect(long renderer, long rect);
+extern int SDL_RenderDrawRect(long renderer, long rect);
+extern int SDL_RenderDrawLine(long renderer, int x1, int y1, int x2, int y2);
+extern int SDL_RenderDrawPoint(long renderer, int x, int y);
+
+// --- Surface ---
+extern void SDL_FreeSurface(long surface);
+extern int SDL_FillRect(long dst, long rect, int color);
+
+// --- Event ---
+extern int SDL_PollEvent(long event);
+extern int SDL_WaitEvent(long event);
+extern void SDL_PumpEvents();
+
+// ============================================================
+// SDL Core - Initialization and management
+// ============================================================
+public class SDL {
+    // Initialize SDL subsystems. Returns 0 on success, negative on error.
+    public static int init(int flags) {
+        return SDL_Init(flags);
+    }
+
+    // Shut down all SDL subsystems.
+    public static void quit() {
+        SDL_Quit();
+    }
+
+    // Wait for specified milliseconds.
+    public static void delay(int ms) {
+        SDL_Delay(ms);
+    }
+
+    // Get milliseconds since SDL initialization.
+    public static int getTicks() {
+        return SDL_GetTicks();
+    }
+
+    // Get last SDL error message.
+    public static String getError() {
+        return SDL_GetError();
+    }
+}
+
+// ============================================================
+// Window - Create and manage SDL windows
+// ============================================================
+public class Window {
+    private long handle;
+    private boolean valid;
+
+    // Create a new SDL window.
+    // Use SDL_WINDOWPOS_CENTERED or SDL_WINDOWPOS_UNDEFINED for x, y.
+    public Window(String title, int x, int y, int w, int h, int flags) {
+        this.handle = SDL_CreateWindow(title, x, y, w, h, flags);
+        this.valid = (this.handle != 0);
+    }
+
+    // Check if window was created successfully.
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    // Get the native SDL_Window pointer.
+    public long getHandle() {
+        return this.handle;
+    }
+
+    // Destroy the window.
+    public void destroy() {
+        if (this.valid) {
+            SDL_DestroyWindow(this.handle);
+            this.valid = false;
+            this.handle = 0;
+        }
+    }
+
+    // Get the window's SDL_Surface (for software rendering).
+    public long getSurface() {
+        return SDL_GetWindowSurface(this.handle);
+    }
+
+    // Copy the window surface to the screen.
+    public int updateSurface() {
+        return SDL_UpdateWindowSurface(this.handle);
+    }
+
+    // Fill the window surface with a color.
+    public int fillSurface(int color) {
+        long surface = this.getSurface();
+        if (surface == 0) {
+            return -1;
+        }
+        return SDL_FillRect(surface, 0, color);
+    }
+
+    // Set the window title.
+    public int setTitle(String title) {
+        return SDL_SetWindowTitle(this.handle, title);
+    }
+
+    // Get the window ID.
+    public long getID() {
+        return SDL_GetWindowID(this.handle);
+    }
+}
+
+// ============================================================
+// Renderer - Accelerated 2D rendering
+// ============================================================
+public class Renderer {
+    private long handle;
+    private boolean valid;
+
+    // Create a renderer for the given window.
+    // index: -1 for first driver matching flags.
+    public Renderer(long window, int index, int flags) {
+        this.handle = SDL_CreateRenderer(window, index, flags);
+        this.valid = (this.handle != 0);
+    }
+
+    // Check if renderer was created successfully.
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    // Get the native SDL_Renderer pointer.
+    public long getHandle() {
+        return this.handle;
+    }
+
+    // Destroy the renderer.
+    public void destroy() {
+        if (this.valid) {
+            SDL_DestroyRenderer(this.handle);
+            this.valid = false;
+            this.handle = 0;
+        }
+    }
+
+    // Clear the current rendering target with the drawing color.
+    public int clear() {
+        return SDL_RenderClear(this.handle);
+    }
+
+    // Present the rendered content to the screen.
+    public void present() {
+        SDL_RenderPresent(this.handle);
+    }
+
+    // Set the color used for drawing operations.
+    public int setDrawColor(int r, int g, int b, int a) {
+        return SDL_SetRenderDrawColor(this.handle, r, g, b, a);
+    }
+
+    // Fill a rectangle on the current rendering target.
+    public int fillRect(long rect) {
+        return SDL_RenderFillRect(this.handle, rect);
+    }
+
+    // Draw a rectangle outline on the current rendering target.
+    public int drawRect(long rect) {
+        return SDL_RenderDrawRect(this.handle, rect);
+    }
+
+    // Draw a line on the current rendering target.
+    public int drawLine(int x1, int y1, int x2, int y2) {
+        return SDL_RenderDrawLine(this.handle, x1, y1, x2, y2);
+    }
+
+    // Draw a point on the current rendering target.
+    public int drawPoint(int x, int y) {
+        return SDL_RenderDrawPoint(this.handle, x, y);
+    }
+
+    // Copy a texture to the rendering target.
+    public int copy(long texture, long srcrect, long dstrect) {
+        return SDL_RenderCopy(this.handle, texture, srcrect, dstrect);
+    }
+
+    // Create a texture for this renderer.
+    public long createTexture(int format, int access, int w, int h) {
+        return SDL_CreateTexture(this.handle, format, access, w, h);
+    }
+}
+
+// ============================================================
+// Texture - Wrapper for SDL_Texture
+// ============================================================
+public class Texture {
+    private long handle;
+    private boolean valid;
+
+    // Wrap an existing SDL_Texture handle.
+    public Texture(long handle) {
+        this.handle = handle;
+        this.valid = (handle != 0);
+    }
+
+    public boolean isValid() {
+        return this.valid;
+    }
+
+    public long getHandle() {
+        return this.handle;
+    }
+
+    // Destroy the texture.
+    public void destroy() {
+        if (this.valid) {
+            SDL_DestroyTexture(this.handle);
+            this.valid = false;
+            this.handle = 0;
+        }
+    }
+}
+
+// ============================================================
+// Event - Poll and handle SDL events
+// ============================================================
+public class Event {
+    // SDL_Event is 56 bytes on x64, we allocate a buffer on the heap
+    private long buffer;
+
+    // Create an event buffer. Call malloc for the SDL_Event struct (56 bytes).
+    public Event() {
+        this.buffer = malloc(56);
+    }
+
+    // Poll for pending events. Returns 1 if event available, 0 if none.
+    public int poll() {
+        return SDL_PollEvent(this.buffer);
+    }
+
+    // Wait for the next event. Returns 1 on success.
+    public int waitEvent() {
+        return SDL_WaitEvent(this.buffer);
+    }
+
+    // Get the event type from the buffer.
+    // The first 4 bytes of SDL_Event is the Uint32 type field.
+    public int getType() {
+        return __cay_read_int(this.buffer);
+    }
+
+    // Get the timestamp field (bytes 4-7 of the event).
+    public int getTimestamp() {
+        return __cay_read_int(this.buffer + 4);
+    }
+
+    // For keyboard events: read the scancode (byte offset 12 in SDL_KeyboardEvent).
+    public int getKeyScancode() {
+        return __cay_read_int(this.buffer + 12);
+    }
+
+    // For keyboard events: read the key symbol (byte offset 20 in SDL_KeyboardEvent).
+    public int getKeySym() {
+        return __cay_read_int(this.buffer + 20);
+    }
+
+    // For mouse button events: read button index.
+    public int getMouseButton() {
+        // SDL_MouseButtonEvent has button at byte 16
+        return __cay_read_int(this.buffer + 16) & 0xFF;
+    }
+
+    // For mouse motion: read X coordinate.
+    public int getMouseX() {
+        // SDL_MouseMotionEvent has x at byte 20
+        return __cay_read_int(this.buffer + 20);
+    }
+
+    // For mouse motion: read Y coordinate.
+    public int getMouseY() {
+        // SDL_MouseMotionEvent has y at byte 24
+        return __cay_read_int(this.buffer + 24);
+    }
+
+    // Check if keyboard event is a press (vs release).
+    public int getKeyState() {
+        // SDL_KeyboardEvent has state at byte 16
+        return __cay_read_int(this.buffer + 16) & 0xFF;
+    }
+
+    // Free the event buffer.
+    public void dispose() {
+        if (this.buffer != 0) {
+            free(this.buffer);
+            this.buffer = 0;
+        }
+    }
+}
+
+// ============================================================
+// Rect - Helper for SDL_Rect (x, y, w, h)
+// ============================================================
+public class Rect {
+    private long ptr;
+    private boolean owned;
+
+    // Allocate a new SDL_Rect (16 bytes = 4 ints) and set its values.
+    public Rect(int x, int y, int w, int h) {
+        this.ptr = malloc(16);
+        this.owned = true;
+        this.set(x, y, w, h);
+    }
+
+    // Get the pointer to the underlying SDL_Rect.
+    public long getPtr() {
+        return this.ptr;
+    }
+
+    // Set rectangle values and write to the buffer.
+    public void set(int x, int y, int w, int h) {
+        __cay_write_int(this.ptr, x);
+        __cay_write_int(this.ptr + 4, y);
+        __cay_write_int(this.ptr + 8, w);
+        __cay_write_int(this.ptr + 12, h);
+    }
+
+    // Read X from the buffer.
+    public int getX() {
+        return __cay_read_int(this.ptr);
+    }
+
+    // Read Y from the buffer.
+    public int getY() {
+        return __cay_read_int(this.ptr + 4);
+    }
+
+    // Read Width from the buffer.
+    public int getW() {
+        return __cay_read_int(this.ptr + 8);
+    }
+
+    // Read Height from the buffer.
+    public int getH() {
+        return __cay_read_int(this.ptr + 12);
+    }
+
+    // Free the rectangle memory if we own it.
+    public void dispose() {
+        if (this.owned && this.ptr != 0) {
+            free(this.ptr);
+            this.ptr = 0;
+        }
+    }
+}
