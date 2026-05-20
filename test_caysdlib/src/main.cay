@@ -2,7 +2,7 @@
 // test_caysdlib - Cavvy SDL2 Test Program
 // Demonstrates caysdlib binding library: window, renderer, events
 // ============================================================
-#include <lib.cay>
+#include <caysdlib/lib.cay>
 
 public class main {
     public static void main() {
@@ -52,11 +52,11 @@ public class main {
         while (running) {
             // === Event Handling ===
             while (event.poll() != 0) {
-                int type = event.getType();
+                int eventType = event.getType();
 
-                if (type == SDL_QUIT) {
+                if (eventType == SDL_QUIT) {
                     running = false;
-                } else if (type == SDL_KEYDOWN) {
+                } else if (eventType == SDL_KEYDOWN) {
                     int scancode = event.getKeyScancode();
                     if (scancode == SDL_SCANCODE_ESCAPE) {
                         running = false;
