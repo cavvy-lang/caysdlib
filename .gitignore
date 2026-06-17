@@ -2,3 +2,24 @@ Downloads/
 Libs/
 !Libs/README
 
+# Cavvy 构建产物
+target/
+*.exe
+*.ll
+*.o
+*.lib
+*.a
+*.dll
+*.so
+*.dylib
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+Thumbs.db
