@@ -16,7 +16,7 @@ static_link = true
 cflags = []
 ldflags = []
 lib_paths = [
-    "../Libs/SDL2/lib/x64",
+    "./Libs/SDL2/lib/x64",
 ]
 lto = false
 opt_ir = false
@@ -34,24 +34,24 @@ include_prefix = ""
 [ffi]
 system_libs = []
 include_paths = [
-    "../Libs/SDL2/include",
+    "./Libs/SDL2/include",
 ]
 link_options = []
 
 [ffi.libraries.SDL2]
 name = "SDL2"
 lib = "SDL2"
-path = "../Libs/SDL2/lib/x64"
+path = "./Libs/SDL2/lib/x64"
 static_lib = false
 # deps = ["SDL2main"]
 
 [ffi.libraries.SDL2.platform.windows]
 lib = "SDL2"
-path = "../Libs/SDL2/lib/x64"
+path = "./Libs/SDL2/lib/x64"
 
 [workspace]
 lib_paths = [
-    "../Libs/SDL2/lib/x64",
+    "./Libs/SDL2/lib/x64",
 ]
 
 [dependencies]
